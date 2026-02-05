@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // Apply rate limiting to all API routes
 app.use('/api/', limiter);
 
-// Routes
+// Routes for email templates
 app.use('/api/booking', bookingRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/services', servicesRoutes);
@@ -53,7 +53,7 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-// Start server
+// Starting server
 app.listen(PORT, () => {
   console.log(`🚀 Savanna Backend running on port ${PORT}`);
   console.log(`📧 Email service configured for ${process.env.EMAIL_USER}`);
