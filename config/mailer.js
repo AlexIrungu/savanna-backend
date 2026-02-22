@@ -1,23 +1,18 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// Create reusable transporter using Gmail SMTP
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: parseInt(process.env.EMAIL_PORT),
-  secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Verify transporter configuration
-transporter.verify((error, success) => {
+const sendMail = async ({ from, to, subject, html, replyTo }) => {
+  const payload = { from, to, subject, html };
+  if (replyTo) payload.replyTo = replyTo;
+
+  const { data, error } = await resend.emails.send(payload);
+
   if (error) {
-    console.error('❌ Email transporter error:', error);
-  } else {
-    console.log('✅ Email server is ready to send messages');
+    throw new Error(error.message || 'Failed to send email via Resend');
   }
-});
 
-module.exports = transporter;
+  return data;
+};
+
+module.exports = { sendMail };

@@ -1,4 +1,4 @@
-const transporter = require('../config/mailer');
+const { sendMail } = require('../config/mailer');
 const {
   generateCustomerEmail,
   generateBusinessEmail
@@ -68,7 +68,7 @@ exports.createBooking = async (req, res) => {
 
     // Send confirmation email to customer
     const customerEmailHtml = generateCustomerEmail(bookingData);
-    await transporter.sendMail({
+    await sendMail({
       from: process.env.EMAIL_FROM,
       to: email,
       subject: `Booking Confirmation - ${packageTitle}`,
@@ -77,7 +77,7 @@ exports.createBooking = async (req, res) => {
 
     // Send notification email to business
     const businessEmailHtml = generateBusinessEmail(bookingData);
-    await transporter.sendMail({
+    await sendMail({
       from: process.env.EMAIL_FROM,
       to: process.env.BUSINESS_EMAIL,
       subject: `New Booking Request: ${packageTitle} - ${fullName}`,

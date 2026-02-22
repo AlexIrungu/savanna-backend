@@ -1,4 +1,4 @@
-const transporter = require('../config/mailer');
+const { sendMail } = require('../config/mailer');
 const {
   generateContactCustomerEmail,
   generateContactBusinessEmail,
@@ -97,7 +97,7 @@ exports.createContact = async (req, res) => {
 
       // Send emails
       const customerEmailHtml = generateContactCustomerEmail(contactData);
-      await transporter.sendMail({
+      await sendMail({
         from: process.env.EMAIL_FROM,
         to: email,
         subject: `Safari Planning Confirmation - ${location}`,
@@ -105,7 +105,7 @@ exports.createContact = async (req, res) => {
       });
 
       const businessEmailHtml = generateContactBusinessEmail(contactData);
-      await transporter.sendMail({
+      await sendMail({
         from: process.env.EMAIL_FROM,
         to: process.env.BUSINESS_EMAIL,
         subject: `New Travel Inquiry: ${location} - ${customerName}`,
@@ -125,7 +125,7 @@ exports.createContact = async (req, res) => {
 
       // Send emails
       const customerEmailHtml = generateSimpleContactCustomerEmail(contactData);
-      await transporter.sendMail({
+      await sendMail({
         from: process.env.EMAIL_FROM,
         to: email,
         subject: 'Thank You for Contacting Savanna Journeys',
@@ -133,7 +133,7 @@ exports.createContact = async (req, res) => {
       });
 
       const businessEmailHtml = generateSimpleContactBusinessEmail(contactData);
-      await transporter.sendMail({
+      await sendMail({
         from: process.env.EMAIL_FROM,
         to: process.env.BUSINESS_EMAIL,
         subject: `New Contact Form: ${customerName}`,
