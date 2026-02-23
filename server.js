@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Apply rate limiting to all API routes
-app.use('/api/', limiter);
+app.use('/api', limiter);
 
 // Routes for email templates
 app.use('/api/booking', bookingRoutes);
