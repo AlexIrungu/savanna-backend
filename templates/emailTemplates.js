@@ -11,11 +11,22 @@ exports.generateCustomerEmail = (booking) => {
     packageTitle,
     packageCountry,
     duration,
-    travelDate,
+    checkInDate,
+    checkOutDate,
     numberOfTravelers,
+    children,
     accommodationType,
     specialRequests
   } = booking;
+
+  const childrenRows = children && children.length > 0
+    ? `<tr>
+        <td style="padding: 8px 0; color: #78350f; font-weight: bold; vertical-align: top;">Children:</td>
+        <td style="padding: 8px 0; color: #78350f;">
+          ${children.map((c, i) => `Child ${i + 1}: ${c.age === 'Under 1' ? 'Under 1 year' : `${c.age} year${c.age === '1' ? '' : 's'}`}`).join('<br/>')}
+        </td>
+      </tr>`
+    : '';
 
   return `
 <!DOCTYPE html>
@@ -81,13 +92,18 @@ exports.generateCustomerEmail = (booking) => {
                     <td style="padding: 8px 0; color: #78350f;">${duration}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #78350f; font-weight: bold;">Travel Date:</td>
-                    <td style="padding: 8px 0; color: #78350f;">${travelDate}</td>
+                    <td style="padding: 8px 0; color: #78350f; font-weight: bold;">Check-in:</td>
+                    <td style="padding: 8px 0; color: #78350f;">${checkInDate}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 8px 0; color: #78350f; font-weight: bold;">Travelers:</td>
-                    <td style="padding: 8px 0; color: #78350f;">${numberOfTravelers} ${numberOfTravelers == 1 ? 'person' : 'people'}</td>
+                    <td style="padding: 8px 0; color: #78350f; font-weight: bold;">Check-out:</td>
+                    <td style="padding: 8px 0; color: #78350f;">${checkOutDate}</td>
                   </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #78350f; font-weight: bold;">Adults:</td>
+                    <td style="padding: 8px 0; color: #78350f;">${numberOfTravelers} ${numberOfTravelers == 1 ? 'adult' : 'adults'}</td>
+                  </tr>
+                  ${childrenRows}
                   <tr>
                     <td style="padding: 8px 0; color: #78350f; font-weight: bold;">Accommodation:</td>
                     <td style="padding: 8px 0; color: #78350f;">${accommodationType}</td>
@@ -122,7 +138,7 @@ exports.generateCustomerEmail = (booking) => {
               <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center;">
                 <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 16px;">Need Immediate Assistance?</h3>
                 <p style="margin: 0 0 10px 0; color: #374151;">
-                  <strong>Email:</strong> <a href="mailto:journeyssavanna@gmail.com" style="color: #2563eb; text-decoration: none;">journeyssavanna@gmail.com</a>
+                  <strong>Email:</strong> <a href="mailto:info@savannajourneys.com" style="color: #2563eb; text-decoration: none;">info@savannajourneys.com</a>
                 </p>
                 <p style="margin: 0; color: #374151;">
                   <strong>WhatsApp:</strong> <a href="https://wa.me/254742779434" style="color: #2563eb; text-decoration: none;">+254 742 779 434</a>
@@ -167,13 +183,26 @@ exports.generateBusinessEmail = (booking) => {
     packageTitle,
     packageCountry,
     duration,
-    travelDate,
+    checkInDate,
+    checkOutDate,
     numberOfTravelers,
+    children,
     accommodationType,
     specialRequests,
     newsletter,
     submittedAt
   } = booking;
+
+  const childrenRows = children && children.length > 0
+    ? children.map((c, i) => `
+        <tr>
+          <td style="padding: 10px 15px; color: #065f46; font-weight: bold; width: 180px;">${i === 0 ? 'Children:' : ''}</td>
+          <td style="padding: 10px 15px; color: #064e3b;">Child ${i + 1}: ${c.age === 'Under 1' ? 'Under 1 year' : `${c.age} year${c.age === '1' ? '' : 's'}`}</td>
+        </tr>`).join('')
+    : `<tr>
+        <td style="padding: 10px 15px; color: #065f46; font-weight: bold; width: 180px;">Children:</td>
+        <td style="padding: 10px 15px; color: #064e3b;">None</td>
+      </tr>`;
 
   return `
 <!DOCTYPE html>
@@ -264,13 +293,18 @@ exports.generateBusinessEmail = (booking) => {
                   <td style="padding: 10px 15px; color: #064e3b;">${duration}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 10px 15px; color: #065f46; font-weight: bold;">Travel Date:</td>
-                  <td style="padding: 10px 15px; color: #064e3b; font-size: 16px; font-weight: bold;">${travelDate}</td>
+                  <td style="padding: 10px 15px; color: #065f46; font-weight: bold;">Check-in:</td>
+                  <td style="padding: 10px 15px; color: #064e3b; font-size: 16px; font-weight: bold;">${checkInDate}</td>
                 </tr>
                 <tr>
-                  <td style="padding: 10px 15px; color: #065f46; font-weight: bold;">Number of Travelers:</td>
+                  <td style="padding: 10px 15px; color: #065f46; font-weight: bold;">Check-out:</td>
+                  <td style="padding: 10px 15px; color: #064e3b; font-size: 16px; font-weight: bold;">${checkOutDate}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 15px; color: #065f46; font-weight: bold;">Adults:</td>
                   <td style="padding: 10px 15px; color: #064e3b; font-size: 16px; font-weight: bold;">${numberOfTravelers}</td>
                 </tr>
+                ${childrenRows}
                 <tr>
                   <td style="padding: 10px 15px; color: #065f46; font-weight: bold;">Accommodation:</td>
                   <td style="padding: 10px 15px; color: #064e3b;">${accommodationType}</td>

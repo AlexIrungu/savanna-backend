@@ -23,8 +23,10 @@ exports.createBooking = async (req, res) => {
       duration,
 
       // Booking details
-      travelDate,
+      checkInDate,
+      checkOutDate,
       numberOfTravelers,
+      children,
       accommodationType,
       specialRequests,
 
@@ -33,10 +35,18 @@ exports.createBooking = async (req, res) => {
     } = req.body;
 
     // Validation
-    if (!fullName || !email || !phone || !packageTitle || !packageCountry || !travelDate || !numberOfTravelers) {
+    if (!fullName || !email || !phone || !packageTitle || !packageCountry || !checkInDate || !checkOutDate || !numberOfTravelers) {
       return res.status(400).json({
         success: false,
         message: 'Please fill in all required fields'
+      });
+    }
+
+    // Check-out must be after check-in
+    if (new Date(checkOutDate) <= new Date(checkInDate)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Check-out date must be after check-in date'
       });
     }
 
@@ -49,6 +59,9 @@ exports.createBooking = async (req, res) => {
       });
     }
 
+    // Format children summary
+    const childrenList = Array.isArray(children) ? children.filter(c => c.age) : [];
+
     // Prepare booking data
     const bookingData = {
       fullName,
@@ -58,8 +71,10 @@ exports.createBooking = async (req, res) => {
       packageTitle,
       packageCountry,
       duration,
-      travelDate,
+      checkInDate,
+      checkOutDate,
       numberOfTravelers,
+      children: childrenList,
       accommodationType: accommodationType || 'Standard',
       specialRequests: specialRequests || 'None',
       newsletter: newsletter || false,
