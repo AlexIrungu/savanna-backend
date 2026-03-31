@@ -9,6 +9,9 @@ const servicesRoutes = require('./routes/services');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust proxy (required for Render/reverse proxy environments)
+app.set('trust proxy', 1);
+
 // Rate limiting to prevent abuse
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
